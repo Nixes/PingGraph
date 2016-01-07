@@ -1,13 +1,13 @@
 extern crate piston_window;
 extern crate time;
-extern crate regex; // used to parse ping command result
+extern crate regex;
 
 use piston_window::*;
 use std::result::Result;
 use time::*; // used for timers to measure performance
 use std::process::Command; // for running ping command
 use std::thread::sleep_ms;
-use regex::Regex;
+use regex::Regex; // used to parse ping command result
 
 // polygon
 struct graph_obj {
@@ -55,12 +55,12 @@ struct app_str {
 }
 
 fn get_ping (host:String) -> u32 { // TODO: improve error handling
-	let output = Command::new("ping")  // sets the brightness, might be 0-100 or -100 to 100?
+	let output = Command::new("ping")
                     .arg(host) // tell to only perform one ping
                     .arg("-n")
                     .arg("1")
                     .arg("-w")
-                    .arg("800") // give a timeout in ms
+                    .arg("1000") // give a timeout in ms
                     .output()
                     .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
 	let stringStdOut = String::from_utf8_lossy(&output.stdout);
@@ -91,13 +91,13 @@ fn convert_value_to_color(value: u32,max_value: u32) -> [f32; 4] { // used for h
     let norm_value :f32 = value as f32 / max_value as f32;
 
     if norm_value <= 0.25 {
-        color = [0.0, norm_value*4.0, 1.0, 1.0]; //color.push_back(ColorPoint(0, 1, 1,   0.25f));// Cyan.
+        color = [0.0, norm_value*4.0, 1.0, 1.0]; // Cyan.
     } else if norm_value > 0.25 && norm_value <= 0.5 {
-        color = [0.0, 1.0, 1.0-((norm_value-0.25)*4.0), 1.0]; //color.push_back(ColorPoint(0, 1, 0,   0.5f)); // Green.
+        color = [0.0, 1.0, 1.0-((norm_value-0.25)*4.0), 1.0]; // Green.
     } else if norm_value > 0.5 && norm_value <= 0.75 {
-        color = [(norm_value-0.5)*4.0, 1.0, 0.0, 1.0]; //color.push_back(ColorPoint(1, 1, 0,   0.75f));// Yellow.
+        color = [(norm_value-0.5)*4.0, 1.0, 0.0, 1.0]; // Yellow.
     } else if norm_value > 0.75 && norm_value <= 1.0 {
-        color = [1.0, 1.0-((norm_value-0.75)*4.0), 0.0, 1.0]; //color.push_back(ColorPoint(1, 0, 0,   1.0f)); // Red.
+        color = [1.0, 1.0-((norm_value-0.75)*4.0), 0.0, 1.0]; // Red.
     }
     color
 }
@@ -105,31 +105,27 @@ fn convert_value_to_color(value: u32,max_value: u32) -> [f32; 4] { // used for h
 fn main() {
 	let mut application = app_str{samples_sec:1,samples_max:150,border: 0,window_width: 600, window_height: 300};
 
-	// preferably use V3_2, but can use v2_1
-    let opengl = OpenGL::V2_1;
+    let opengl = OpenGL::V2_1; // lowest supported opengl version
     let windowsettings = WindowSettings::new("Ping Graph", [application.window_width, application.window_height]).vsync(false);
     //windowsettings.vsync(true);
-    //println!("Vsync was: {}",windowsettings.get_vsync() );
+
     let mut window: PistonWindow =
         windowsettings
         .exit_on_esc(true)
         .opengl(opengl)
         .build()
         .unwrap();
-    window.set_max_fps(application.samples_sec); // setting to 80 gets around 65 fps
+    window.set_max_fps(application.samples_sec);
     window.set_ups(application.samples_sec);
     //sleep_ms(pollingTime);
     let mut graph = graph_obj::new(application.samples_max,application.window_width);
-    //graph.gen_test(&mut graph, 0, 300, 50);
 
     for e in window {
         e.update(|args| {
             graph.add_sample( get_ping("www.google.com".to_string()) )
         });
         e.draw_2d(|c, g| {
-            clear([1.0; 4], g); // white was clear([1.0; 4], g); original
-            //rectangle([0.8, 0.8, 0.8, 1.0],[application.border as f64, application.border as f64, (application.window_width - (application.border*2) ) as f64, (application.window_height - (application.border*2) ) as f64],c.transform, g);
-            //graphics::grid(10,10,10);
+            clear([1.0; 4], g);
             for (itemNo,&item) in graph.line_values.iter().enumerate() {
                 //println!("One bar drawn value: {} number: {}",item,itemNo);
                 let color = convert_value_to_color(item,200);
@@ -139,7 +135,6 @@ fn main() {
                                                 item as f64 * graph.line_height_scale_factor * -1.0]
                                                 /* x,y,width,height */
                                                 ,c.transform, g);
-                //text([0.5, 0.0, 0.0, 1.0],10,"Something",[10, 10],c.transform,g);
             }
         });
 		e.mouse_scroll(|dx, dy| { });
