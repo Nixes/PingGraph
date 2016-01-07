@@ -1,0 +1,10 @@
+[package]
+name = "ping_graph"
+version = "0.1.0"
+authors = ["Nixes"]
+
+[dependencies]
+piston_window = "*"
+interpolation = "*"
+time = "*"
+regex = "0.1.41"
