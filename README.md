@@ -5,6 +5,6 @@ Simple rust utility to graph ping over time.
 
 ![Alt text](ping_graph_screenshot.PNG)
 
-Just wraps windows ping utility and uses piston with OpenGL backend for rendering. Only the ping command parsing is windows specific, everything else is platform independent.
+Just wraps the os supplied ping utility while using piston (OpenGL)for rendering. It is tested to work on Windows and Linux, but probably works on osx too.
 
-Pings google.com by default, which should always redirect to localised version and thus give values between 30 and 100ms for most users.
+It pings google.com by default, which should always redirect to localised version, giving values between 30 and 100ms for most users.
