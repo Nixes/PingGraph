@@ -1,8 +1,8 @@
 environment:
   matrix:
-  - TARGET: x86_64-pc-windows-msvc
+#  - TARGET: x86_64-pc-windows-msvc
   - TARGET: i686-pc-windows-msvc
-  - TARGET: i686-pc-windows-gnu
+ # - TARGET: i686-pc-windows-gnu
 install:
   - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-1.5.0-${env:TARGET}.exe"
   - rust-1.5.0-%TARGET%.exe /VERYSILENT /NORESTART /DIR="C:\Program Files (x86)\Rust"
@@ -10,8 +10,9 @@ install:
   - SET PATH=%PATH%;C:\MinGW\bin
   - rustc -V
   - cargo -V
-  - ps: Start-FileDownload 'https://cdn.rawgit.com/tedsta/getting-started-with-piston/2e908548c5538cfb8c1d1b1b2d56dfe794e60a6e/windows_clibs/i686/libfreetype-6.a'
-  - cmd: move libfreetype-6.a "C:\Program Files (x86)\Rust\bin\rustlib\${env:TARGET}\lib\"
+  - ps: Start-FileDownload 'https://github.com/PistonDevelopers/binaries/raw/master/i686/freetype.lib'
+  - cmd: move freetype.lib "C:\Program Files (x86)\Rust\bin\rustlib\${env:TARGET}\lib\freetype.lib"
+ # - cmd: move libfreetype-6.a "C:\Program Files (x86)\Rust\bin\rustlib\${env:TARGET}\lib\"
 
 build: false
 
