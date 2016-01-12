@@ -1,4 +1,5 @@
 # PingGraph
+[![Build Status](https://travis-ci.org/Nixes/PingGraph.svg?branch=master)](https://travis-ci.org/Nixes/PingGraph)
 Simple rust utility to graph ping over time.
 
 
