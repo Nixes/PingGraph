@@ -54,13 +54,52 @@ struct app_str {
 	window_height: u32
 }
 
-fn get_ping (host:String) -> u32 { // TODO: improve error handling
-	let output = Command::new("ping")
-                    .arg(host) // tell to only perform one ping
-                    .arg("-n")
+fn get_unix_ping (host:String) -> u32 {
+    let output = Command::new("ping")
+                    .arg("-c")
                     .arg("1")
                     .arg("-w")
-                    .arg("1000") // give a timeout in ms
+                    .arg("800") // give a timeout in ms
+                    .arg(host) // for osx the host needs to be the last argument
+                    .output()
+                    .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
+	let stringStdOut = String::from_utf8_lossy(&output.stdout);
+    let mut finalvalue :u32 = 0;
+    if stringStdOut.contains("Request timed out.") {
+        finalvalue = 1000; // over 1 second
+        println!("Ping Timed Out.");
+    } else {
+        let value = stringStdOut.split(" time=").last().unwrap(); // get part of string after this piece of text, then remove the units
+        let value2 = value.split("ms").nth(0).unwrap(); // get rid of excess
+        // this mess here try's to first convert to a floating point number, and rounds it. Failing that it converts the string to a unsigned int directly
+        match value2.trim().parse::<f32>() {
+            Ok(val) => {
+                finalvalue = val.round() as u32;
+            }
+            Err(why) => {
+                match value2.trim().parse::<u32>() {
+                    Ok(val) => {
+                        finalvalue = val;
+                    }
+                    Err(why) => {}
+                }
+            }
+        }
+    }
+    println!("Ping: {}", finalvalue);
+    //println!("Result: {}",stringStdOut);
+    //println!("status: {}", output.status);
+    //println!("stdout: {}", stringStdOut);
+    finalvalue
+}
+
+fn get_win_ping (host:String) -> u32 { // TODO: improve error handling
+	let output = Command::new("ping")
+                    .arg(host)
+                    .arg("-n")  // tell to only perform one ping
+                    .arg("1")
+                    .arg("-w")
+                    .arg("800") // give a timeout in ms
                     .output()
                     .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
 	let stringStdOut = String::from_utf8_lossy(&output.stdout);
@@ -122,7 +161,13 @@ fn main() {
 
     for e in window {
         e.update(|args| {
-            graph.add_sample( get_ping("www.google.com".to_string()) )
+            graph.add_sample(
+                if cfg!(windows) {
+                    get_win_ping("www.google.com".to_string())
+                } else {
+                    get_unix_ping("www.google.com".to_string())
+                }
+            )
         });
         e.draw_2d(|c, g| {
             clear([1.0; 4], g);
