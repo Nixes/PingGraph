@@ -11,7 +11,7 @@ install:
   - rustc -V
   - cargo -V
   - ps: Start-FileDownload 'https://github.com/PistonDevelopers/binaries/raw/master/i686/freetype.lib'
-  - cmd: move freetype.lib "C:\Program Files (x86)\Rust\bin\rustlib\${env:TARGET}\lib\"
+  - cmd: move freetype.lib "C:\Program Files (x86)\Rust\bin\rustlib\{env:TARGET}\lib\"
  # - cmd: move libfreetype-6.a "C:\Program Files (x86)\Rust\bin\rustlib\${env:TARGET}\lib\"
 
 build: false
