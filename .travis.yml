@@ -3,7 +3,7 @@ rust:
   - stable
 os:
   - linux
-  - osx
+ # - osx
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update          ; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install freetype; fi
