@@ -8,13 +8,4 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update          ; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install freetype; fi
 script:
-  - cargo build -v --release
-deploy:
-  provider: releases
-  file:
-    - "target/release/ping_graph"
-
-  skip_cleanup: true
-  on:
-    tags: true
-    all_branches: true
+  - cargo build -v
