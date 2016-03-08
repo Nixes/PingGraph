@@ -4,6 +4,7 @@ version = "0.1.1"
 authors = ["Nixes"]
 
 [dependencies]
+rust_plot = {git = "https://github.com/Nixes/rust_plot"}
 piston_window = "*"
 interpolation = "*"
 time = "*"
