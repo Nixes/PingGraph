@@ -676,7 +676,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "rust_plot"
 version = "0.1.1"
-source = "git+https://github.com/Nixes/rust_plot#dff66ed73a75c25045030faeb875cd4269e6b03f"
+source = "git+https://github.com/Nixes/rust_plot#9b0f3ba4dad76d791ced10e8a4d8c7fbb3fcc6cf"
 dependencies = [
  "piston2d-graphics 0.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
