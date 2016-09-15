@@ -44,6 +44,8 @@ matrix:
             # Transparent emulation
             - qemu-user-static
             - binfmt-support
+            #build dependencies
+            - libfreetype6-dev
     - os: osx
       rust: stable
       env: TARGET=i686-apple-darwin
