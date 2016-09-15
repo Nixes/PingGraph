@@ -77,9 +77,10 @@ fn get_win_ping (host:String) -> u32 { // TODO: improve error handling
     finalvalue
 }
 
+/* have not yet been able to draw text, so disabling this for now 
 fn drawLastPingValue() {
     let mut normal_text = graphics::text::new(factory.clone()).unwrap();
-}
+}*/
 
 fn main() {
 	let mut application = app_str{samples_sec:1,samples_max:150,border: 0,window_width: 600, window_height: 300};
