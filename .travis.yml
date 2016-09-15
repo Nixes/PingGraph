@@ -29,6 +29,8 @@ matrix:
             # Transparent emulation
             - qemu-user-static
             - binfmt-support
+            #build dependencies
+            - libfreetype6-dev
     - os: linux
       rust: stable
       env: TARGET=armv7-unknown-linux-gnueabihf
@@ -57,6 +59,8 @@ matrix:
           packages: &i686_unknown_linux_gnu
             # Cross compiler and cross compiled C libraries
             - gcc-multilib
+            #build dependencies
+            - libfreetype6-dev
     - os: linux
       rust: stable
       env: TARGET=i686-unknown-linux-musl
