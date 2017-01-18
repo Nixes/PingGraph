@@ -8,11 +8,7 @@ environment:
     # Stable channel
     - TARGET: i686-pc-windows-gnu
       CHANNEL: stable
-    - TARGET: i686-pc-windows-msvc
-      CHANNEL: stable
     - TARGET: x86_64-pc-windows-gnu
-      CHANNEL: stable
-    - TARGET: x86_64-pc-windows-msvc
       CHANNEL: stable
 
 # Install Rust and Cargo
@@ -24,6 +20,7 @@ install:
   - rustc -Vv
   - cargo -V
 
+
 # 'cargo test' takes care of building for us, so disable Appveyor's build stage. This prevents
 # the "directory does not contain a project or solution file" error.
 # source: https://github.com/starkat99/appveyor-rust/blob/master/appveyor.yml#L113
@@ -33,7 +30,7 @@ build: false
 # TODO modify this phase as you see fit
 test_script:
   - cargo build --verbose
-  - cargo run
+  #- cargo run
   - cargo test
 
 before_deploy:
@@ -41,7 +38,7 @@ before_deploy:
   - cargo build --release
   - mkdir staging
   # TODO update this part to copy the artifacts that make sense for your project
-  - copy target\release\hello.exe staging
+  - copy target\release\ping_graph.exe staging
   - cd staging
     # release zipfile will look like 'rust-everywhere-v1.2.3-x86_64-pc-windows-msvc'
   - 7z a ../%PROJECT_NAME%-%APPVEYOR_REPO_TAG_NAME%-%TARGET%.zip *
